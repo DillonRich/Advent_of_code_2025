@@ -1,4 +1,5 @@
 """
+https://adventofcode.com/2025/day/2
 Solution to the Gift Shop Invalid Product IDs Problem
 
 This script finds all invalid product IDs in the given ranges.
