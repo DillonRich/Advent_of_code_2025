@@ -1,0 +1,92 @@
+"""
+Solution to the Gift Shop Invalid Product IDs Problem
+
+This script finds all invalid product IDs in the given ranges.
+An invalid ID is any number that is composed of the same sequence 
+of digits repeated twice (e.g., 55, 6464, 123123).
+"""
+
+def find_invalid_ids():
+    """
+    Main function to find and sum all invalid IDs in the given ranges.
+    
+    Returns:
+        int: The sum of all invalid IDs found
+    """
+    
+    # Input ranges as provided in the problem
+    ranges_str = "82853534-82916516,2551046-2603239,805115-902166,3643-7668,4444323719-4444553231,704059-804093,32055-104187,7767164-7799624,25-61,636-1297,419403897-419438690,66-143,152-241,965984-1044801,1-19,376884-573880,9440956-9477161,607805-671086,255-572,3526071225-3526194326,39361322-39455443,63281363-63350881,187662-239652,240754-342269,9371-26138,1720-2729,922545-957329,3477773-3688087,104549-119841"
+    
+    # Parse the ranges into a list of (start, end) tuples
+    # Split by comma to get individual ranges, then by dash to separate start and end
+    ranges = []
+    for range_str in ranges_str.split(","):
+        start, end = map(int, range_str.split("-"))
+        ranges.append((start, end))
+    
+    # Initialize total sum of invalid IDs
+    total_sum = 0
+    
+    # Process each range one by one
+    for start, end in ranges:
+        current = start  # Start checking from the beginning of the range
+        
+        while current <= end:
+            # Convert number to string to analyze its digit pattern
+            str_num = str(current)
+            length = len(str_num)
+            
+            # Only numbers with even digit count can have the repeated pattern
+            if length % 2 == 0:
+                half_length = length // 2
+                first_half = str_num[:half_length]
+                second_half = str_num[half_length:]
+                
+                # Check if the number is composed of the same sequence repeated twice
+                if first_half == second_half:
+                    # Found an invalid ID - add it to our running total
+                    total_sum += current
+                    
+                    # Optimization: Skip to the next potential invalid ID
+                    # Since we found a pattern like "ABAB", next could be "(A+1)(A+1)"
+                    try:
+                        next_half = str(int(first_half) + 1)
+                        
+                        # Check if incrementing adds an extra digit (e.g., 99 -> 100)
+                        if len(next_half) > half_length:
+                            # Pattern length changes, can't use optimization
+                            current += 1
+                        else:
+                            # Create the next potential invalid ID by repeating (A+1)
+                            next_num = int(next_half + next_half)
+                            
+                            # Only jump if we're still moving forward and within range
+                            if next_num > current:
+                                current = next_num
+                            else:
+                                current += 1
+                    except ValueError:
+                        # If conversion fails, just move to next number
+                        current += 1
+                else:
+                    # Not an invalid ID, check next number
+                    current += 1
+            else:
+                # Odd digit count, can't be invalid ID
+                current += 1
+    
+    return total_sum
+
+
+def main():
+    """
+    Main execution function.
+    Calculates and prints the sum of all invalid IDs.
+    """
+    result = find_invalid_ids()
+    print(f"The sum of all invalid IDs is: {result}")
+
+
+# Standard Python idiom to check if this script is being run directly
+if __name__ == "__main__":
+    main()
