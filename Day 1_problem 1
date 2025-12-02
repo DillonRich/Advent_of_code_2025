@@ -1,4 +1,4 @@
-#Breif Description: Solving a password for a number lock 0-99. Starting at 50. The actuall password is the count of how many times the pointer lands on 0. Full problem at https://adventofcode.com/2025/day/1
+#Breif Description: Solving a password for a number lock 0-99. Starting at 50. The actuall password is the count of how many times the pointer lands on 0. L is clockwise, R is counter. Full problem at https://adventofcode.com/2025/day/1
 
 def solve_dial_password(instructions):
     # Starting position is 50
